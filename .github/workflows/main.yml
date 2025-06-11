@@ -1,4 +1,4 @@
-name: Deploy a Surge
+name: Deploy a Surge.sh
 
 on:
   push:
@@ -6,14 +6,22 @@ on:
       - main
 
 jobs:
-  build_and_deploy:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+    - name: Checkout repo
+      uses: actions/checkout@v3
 
-      - name: Deploy to Surge
-        run: |
-          npm install -g surge
-          surge ./ --domain  wealthy-trees.surge.sh --token ${{ secrets.SURGE_TOKEN }}
+    - name: Install Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20'
+
+    - name: Install Surge
+      run: npm install --global surge
+
+    - name: Deploy to Surge
+      env:
+        SURGE_TOKEN: ${{ secrets.SURGE_TOKEN }}
+      run: surge ./ --domain wealthy-trees.surge.sh --token $SURGE_TOKEN
