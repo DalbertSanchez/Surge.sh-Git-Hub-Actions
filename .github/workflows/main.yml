@@ -1,0 +1,19 @@
+name: Deploy a Surge
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Deploy to Surge
+        run: |
+          npm install -g surge
+          surge ./ --domain 1erparcialelectiva2.surge.sh --token ${{ secrets.SURGE_TOKEN }}
